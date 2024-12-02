@@ -11,12 +11,13 @@
 #include <vector>
 #include <utility>
 #include <iostream>
+#include <string.h>
 
 class GobangBoard {
 
 public:
     GobangBoard();
-    [[noreturn]] void run();
+    void run();
     std::pair<int, int> pre_black;
     std::pair<int, int> pre_white;
 
@@ -38,7 +39,8 @@ private:
     void boardReset();
     void winOrLose(bool win);
     void aiPlay();
-
+    static void clearScreen();
+    static void clearInputBuffer();
 };
 
 #endif // GOBANGBOARD_H

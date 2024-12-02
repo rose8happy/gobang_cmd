@@ -30,7 +30,7 @@ bool GobangRuleChecker::checkForbidden(int x, int y) const {
                 }
             }
         }
-        return x >= board.size() / 2;
+        return x > board.size() / 2;
     }
     if (chess == 1)
     {
