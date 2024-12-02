@@ -12,12 +12,16 @@ GobangBoard::GobangBoard() : ruleChecker(board, chess), ai(board,chess)
 [[noreturn]] void GobangBoard::run() {
     while (true) {
         // 开始游戏
-
+        start();
         // 一局游戏中，画棋盘，接受指令
-        while (true) {
+        while (gameStarted) {
             drawBoard();
             mousePressEvent();
         }
+        printf("Do you want to play again? (y/n): ");
+        char choice;
+        std::cin >> choice;
+        if (choice == 'n' || choice == 'N') break;
     }
 }
 
@@ -30,7 +34,7 @@ void GobangBoard::start()
     std::uniform_int_distribution<> dis(1, 2);  // 设置 1 或 2 的分布
     // 生成 1 或 2 的随机数
     chess = dis(gen);
-    ai.chess = chess;
+    ai.chess = 3-chess;
     if (chess == 1) {
         isMyTurn = true;
         printf("提示 You play black and go first\n");
@@ -39,10 +43,9 @@ void GobangBoard::start()
         isMyTurn = false;
         printf("提示 You play white and go second\n");
         aiPlay();
-    } else
-    {
-        printf("提示Error");
     }
+    printf("按下任意健开始游戏\n");
+    getchar();
 }
 
 // void GobangBoard::onSurrenderButtonClicked()
@@ -63,20 +66,24 @@ void GobangBoard::winOrLose(bool win)
 {
     if (win)
     {
-        printf("提示You win!");
+        printf("提示You win!\n");
     } else
     {
-        printf("提示You lose!");
+        printf("提示You lose!\n");
     }
     gameStarted = false;
     isMyTurn = false;
+    printf("按下任意健重新开始\n");
+    getchar();
 }
 
 void GobangBoard::drawBoard() {
     system("cls");   //清屏
+    printf("  ");
     for (int i=0;i<boardSize;i++) {
         printf("%d ", i+1);
     }
+    printf("\n");
     for (int i=0;i<boardSize;i++) {
         printf("%c ", 'A'+i);
         for (int j=0;j<boardSize;j++) {
@@ -93,7 +100,7 @@ void GobangBoard::drawBoard() {
                 else if (i==boardSize-1 && j==boardSize-1) printf("┛");
                 else if (i==0 && j==boardSize-1) printf("┓");
                 else if (i==boardSize-1 && j==0) printf("┗");
-                else if (i==0) printf("┃");
+                else if (i==0) printf("┯");
                 else if (j==0) printf("┣");
                 else if (i==boardSize-1) printf("┻");
                 else if (j==boardSize-1) printf("┫");
@@ -102,30 +109,37 @@ void GobangBoard::drawBoard() {
         }
         printf("\n");
     }
+    // 提示执棋
+    printf("输入要下的位置坐标如(A,1)\n");
 }
 
 void GobangBoard::mousePressEvent() {
-    char row_c = 0; int col_i = 0;
-    scanf("%c %d", &row_c, &col_i);
-    getchar();
+    std::string input;
+    std::getline(std::cin, input);
 
-    int col = col_i;
-    int row = row_c - 'A';
+    if (input.size() < 3 || input[0] < 'A' || input[0] >= 'A' + boardSize || input[2] < '1' || input[2] > '9') {
+        printf("提示 Invalid input. Please enter in format (A,1).\n");
+        return;
+    }
+
+    int row = input[0] - 'A';
+    int col = input[2] - '1';
 
     if (!isMyTurn) return;
 
     // 在自己的回合才能下棋
     if (col >= 0 && col < boardSize && row >= 0 && row < boardSize && board[row][col] == 0) {
         // 检查禁手，禁止落子
-        //ruleChecker.board = board;
         ruleChecker.chess = chess;
         if (ruleChecker.isForbiddenMove(row, col))
         {
-            printf( "提示You can not put a piece here!");
+            printf( "提示You can not put a piece here!\n");
             return;
         }
         isMyTurn = false; // 在AI下完棋后置回true
         board[row][col] = chess;  // 示例：黑棋放置
+        if (chess == 1) pre_black = {row, col};
+        else pre_white = {row, col};
         drawBoard();  // 更新界面显示
         int res = ruleChecker.judge();
         if (res)
@@ -140,17 +154,12 @@ void GobangBoard::mousePressEvent() {
 
 void GobangBoard::aiPlay()
 {
-    // 使用C++11随机数库生成一个1到2秒之间的随机延迟
-    std::random_device rd;
-    std::mt19937 gen(rd()); // 使用随机种子生成器
-    std::uniform_int_distribution<> dis(0, 1000); // 生成1000到2000毫秒的随机数
-    int delay = dis(gen); // 获取随机延迟
-    // 使用QTimer单次延迟调用
-
     ai.chess=chess;
     auto bestMove = ai.getBestMove();
+    if (chess == 1) pre_white = bestMove;
+    else pre_black = bestMove;
     int ai_chess = 3-chess;
-    board[bestMove.first()][bestMove.second()] = ai_chess;
+    board[bestMove.first][bestMove.second] = ai_chess;
     drawBoard();
     int res = ruleChecker.judge();
     if (res)
@@ -159,7 +168,5 @@ void GobangBoard::aiPlay()
         return;
     }
     isMyTurn = true;
-
-
 }
 

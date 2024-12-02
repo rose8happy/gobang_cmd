@@ -10,18 +10,19 @@
 #include "GobangAI.h"
 #include <vector>
 #include <utility>
+#include <iostream>
 
 class GobangBoard {
 
 public:
     GobangBoard();
-    void run();
+    [[noreturn]] void run();
+    std::pair<int, int> pre_black;
+    std::pair<int, int> pre_white;
 
 private:
 
     int boardSize = 15;        // ÆåÅÌ´óĞ¡ (15x15)
-    std::pair<int, int> pre_black;
-    std::pair<int, int> pre_white;
 
     // ÆåÅÌÊı×é£¬0=¿Õ£¬1=ºÚÆå£¬2=°×Æå
     std::vector<std::vector<int>> board;
