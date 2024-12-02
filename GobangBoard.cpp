@@ -5,15 +5,17 @@
 
 GobangBoard::GobangBoard() : ruleChecker(board, chess), ai(board,chess)
 {
-    // ³õÊ¼»¯ÆåÅÌÊı×éÎª 0£¨¿Õ£©
+    // åˆå§‹åŒ–æ£‹ç›˜æ•°ç»„ä¸º 0ï¼ˆç©ºï¼‰
     board = std::vector<std::vector<int>>(boardSize, std::vector<int>(boardSize, 0));
+    pre_white = {-1,-1};
+    pre_black = {-1,-1};
 }
 
 [[noreturn]] void GobangBoard::run() {
     while (true) {
-        // ¿ªÊ¼ÓÎÏ·
+        // å¼€å§‹æ¸¸æˆ
         start();
-        // Ò»¾ÖÓÎÏ·ÖĞ£¬»­ÆåÅÌ£¬½ÓÊÜÖ¸Áî
+        // ä¸€å±€æ¸¸æˆä¸­ï¼Œç”»æ£‹ç›˜ï¼Œæ¥å—æŒ‡ä»¤
         while (gameStarted) {
             drawBoard();
             mousePressEvent();
@@ -28,24 +30,25 @@ GobangBoard::GobangBoard() : ruleChecker(board, chess), ai(board,chess)
 void GobangBoard::start()
 {
     boardReset();
-    // Ê¹ÓÃËæ»úÉè±¸»ñÈ¡Ëæ»úÖÖ×Ó
+    // ä½¿ç”¨éšæœºè®¾å¤‡è·å–éšæœºç§å­
     std::random_device rd;
-    std::mt19937 gen(rd());  // Ê¹ÓÃ Mersenne Twister ÒıÇæ
-    std::uniform_int_distribution<> dis(1, 2);  // ÉèÖÃ 1 »ò 2 µÄ·Ö²¼
-    // Éú³É 1 »ò 2 µÄËæ»úÊı
+    std::mt19937 gen(rd());  // ä½¿ç”¨ Mersenne Twister å¼•æ“
+    std::uniform_int_distribution<> dis(1, 2);  // è®¾ç½® 1 æˆ– 2 çš„åˆ†å¸ƒ
+    // ç”Ÿæˆ 1 æˆ– 2 çš„éšæœºæ•°
     chess = dis(gen);
     ai.chess = 3-chess;
     if (chess == 1) {
         isMyTurn = true;
-        printf("ÌáÊ¾ You play black and go first\n");
+        printf("æç¤º You play black and go first\n");
     } else if (chess==2)
     {
         isMyTurn = false;
-        printf("ÌáÊ¾ You play white and go second\n");
+        printf("æç¤º You play white and go second\n");
         aiPlay();
     }
-    printf("°´ÏÂÈÎÒâ½¡¿ªÊ¼ÓÎÏ·\n");
+    printf("æŒ‰ä¸‹ä»»æ„å¥å¼€å§‹æ¸¸æˆ\n");
     getchar();
+    gameStarted = true;
 }
 
 // void GobangBoard::onSurrenderButtonClicked()
@@ -59,58 +62,61 @@ void GobangBoard::boardReset()
     {
         std::fill(board[i].begin(), board[i].end(), 0);
     }
-    drawBoard();
+    //drawBoard();
 }
 
 void GobangBoard::winOrLose(bool win)
 {
     if (win)
     {
-        printf("ÌáÊ¾You win!\n");
+        printf("æç¤ºYou win!\n");
     } else
     {
-        printf("ÌáÊ¾You lose!\n");
+        printf("æç¤ºYou lose!\n");
     }
     gameStarted = false;
     isMyTurn = false;
-    printf("°´ÏÂÈÎÒâ½¡ÖØĞÂ¿ªÊ¼\n");
+    printf("æŒ‰ä¸‹ä»»æ„å¥é‡æ–°å¼€å§‹\n");
     getchar();
 }
 
 void GobangBoard::drawBoard() {
-    system("cls");   //ÇåÆÁ
+
+    system("cls");   //æ¸…å±
+    //printf("\033[2J");
     printf("  ");
     for (int i=0;i<boardSize;i++) {
-        printf("%d ", i+1);
+        printf("%-2d ", i+1);
     }
     printf("\n");
     for (int i=0;i<boardSize;i++) {
         printf("%c ", 'A'+i);
         for (int j=0;j<boardSize;j++) {
             if (i==pre_white.first && j==pre_white.second) {
-                printf("¡ø");
+                printf("â–²");
             } else if (i==pre_black.first && j==pre_black.second) {
-                printf("¡÷");
+                printf("â–³");
             }else if (board[i][j] == 1) {
-                printf("¡ñ");
+                printf("â—");
             } else if (board[i][j] == 2) {
-                printf("¡ğ");
+                printf("â—‹");
             } else if (board[i][j] == 0) {
-                if (i==0 && j==0) printf("©³");
-                else if (i==boardSize-1 && j==boardSize-1) printf("©¿");
-                else if (i==0 && j==boardSize-1) printf("©·");
-                else if (i==boardSize-1 && j==0) printf("©»");
-                else if (i==0) printf("©Ó");
-                else if (j==0) printf("©Ç");
-                else if (i==boardSize-1) printf("©ß");
-                else if (j==boardSize-1) printf("©Ï");
-                else printf("©ï");
+                if (i==0 && j==0) printf("â”");
+                else if (i==boardSize-1 && j==boardSize-1) printf("â”›");
+                else if (i==0 && j==boardSize-1) printf("â”“");
+                else if (i==boardSize-1 && j==0) printf("â”—");
+                else if (i==0) printf("â”¯");
+                else if (j==0) printf("â”£");
+                else if (i==boardSize-1) printf("â”»");
+                else if (j==boardSize-1) printf("â”«");
+                else printf("â•‹");
             }
+            printf("  ");
         }
         printf("\n");
     }
-    // ÌáÊ¾Ö´Æå
-    printf("ÊäÈëÒªÏÂµÄÎ»ÖÃ×ø±êÈç(A,1)\n");
+    // æç¤ºæ‰§æ£‹
+    printf("è¾“å…¥è¦ä¸‹çš„ä½ç½®åæ ‡å¦‚(A,1)\n");
 }
 
 void GobangBoard::mousePressEvent() {
@@ -118,7 +124,7 @@ void GobangBoard::mousePressEvent() {
     std::getline(std::cin, input);
 
     if (input.size() < 3 || input[0] < 'A' || input[0] >= 'A' + boardSize || input[2] < '1' || input[2] > '9') {
-        printf("ÌáÊ¾ Invalid input. Please enter in format (A,1).\n");
+        printf("æç¤º Invalid input. Please enter in format (A,1).\n");
         return;
     }
 
@@ -127,20 +133,20 @@ void GobangBoard::mousePressEvent() {
 
     if (!isMyTurn) return;
 
-    // ÔÚ×Ô¼ºµÄ»ØºÏ²ÅÄÜÏÂÆå
+    // åœ¨è‡ªå·±çš„å›åˆæ‰èƒ½ä¸‹æ£‹
     if (col >= 0 && col < boardSize && row >= 0 && row < boardSize && board[row][col] == 0) {
-        // ¼ì²é½ûÊÖ£¬½ûÖ¹Âä×Ó
+        // æ£€æŸ¥ç¦æ‰‹ï¼Œç¦æ­¢è½å­
         ruleChecker.chess = chess;
         if (ruleChecker.isForbiddenMove(row, col))
         {
-            printf( "ÌáÊ¾You can not put a piece here!\n");
+            printf( "æç¤ºYou can not put a piece here!\n");
             return;
         }
-        isMyTurn = false; // ÔÚAIÏÂÍêÆåºóÖÃ»Øtrue
-        board[row][col] = chess;  // Ê¾Àı£ººÚÆå·ÅÖÃ
+        isMyTurn = false; // åœ¨AIä¸‹å®Œæ£‹åç½®å›true
+        board[row][col] = chess;  // ç¤ºä¾‹ï¼šé»‘æ£‹æ”¾ç½®
         if (chess == 1) pre_black = {row, col};
         else pre_white = {row, col};
-        drawBoard();  // ¸üĞÂ½çÃæÏÔÊ¾
+        drawBoard();  // æ›´æ–°ç•Œé¢æ˜¾ç¤º
         int res = ruleChecker.judge();
         if (res)
         {

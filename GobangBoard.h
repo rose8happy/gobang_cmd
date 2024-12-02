@@ -22,18 +22,18 @@ public:
 
 private:
 
-    int boardSize = 15;        // ÆåÅÌ´óĞ¡ (15x15)
+    int boardSize = 15;        // æ£‹ç›˜å¤§å° (15x15)
 
-    // ÆåÅÌÊı×é£¬0=¿Õ£¬1=ºÚÆå£¬2=°×Æå
+    // æ£‹ç›˜æ•°ç»„ï¼Œ0=ç©ºï¼Œ1=é»‘æ£‹ï¼Œ2=ç™½æ£‹
     std::vector<std::vector<int>> board;
-    bool gameStarted = false;  // ÓÃÓÚ±ê¼ÇÓÎÏ·ÊÇ·ñ¿ªÊ¼
-    bool isMyTurn = false; // ÊÇ·ñÂÖµ½×Ô¼ºÂä×Ó
-    int chess = 1; // 1=ºÚÆå£¬2=°×Æå
-    GobangRuleChecker ruleChecker; // ½ûÊÖ¹æÔò¼ì²éÀà
+    bool gameStarted = false;  // ç”¨äºæ ‡è®°æ¸¸æˆæ˜¯å¦å¼€å§‹
+    bool isMyTurn = false; // æ˜¯å¦è½®åˆ°è‡ªå·±è½å­
+    int chess = 1; // 1=é»‘æ£‹ï¼Œ2=ç™½æ£‹
+    GobangRuleChecker ruleChecker; // ç¦æ‰‹è§„åˆ™æ£€æŸ¥ç±»
     GobangAI ai;
 
     void mousePressEvent();
-    void drawBoard();   // »æÖÆÆåÅÌ
+    void drawBoard();   // ç»˜åˆ¶æ£‹ç›˜
     void start();
     void boardReset();
     void winOrLose(bool win);

@@ -12,7 +12,7 @@
 #include <algorithm>
 #include "GobangRuleChecker.h"
 
-// ¶¨Òå²»Í¬ÆåĞÍµÄ·ÖÊı
+// å®šä¹‰ä¸åŒæ£‹å‹çš„åˆ†æ•°
 const int WIN = 10000;
 const int LIVE_FOUR = 1000;
 const int RUSHED_FOUR = 500;
@@ -26,14 +26,14 @@ class GobangAI
 {
 public:
     GobangAI(std::vector<std::vector<int>>& board, int chess);
-    std::vector<std::vector<int>>& board; // ÆåÅÌ×´Ì¬
-    int chess;                           // µ±Ç°Ö´Æå£¬1=ºÚÆå£¬2=°×Æå
+    std::vector<std::vector<int>>& board; // æ£‹ç›˜çŠ¶æ€
+    int chess;                           // å½“å‰æ‰§æ£‹ï¼Œ1=é»‘æ£‹ï¼Œ2=ç™½æ£‹
 
-    // ¼ÆËã×î¼ÑÏÂÆåÎ»ÖÃ
+    // è®¡ç®—æœ€ä½³ä¸‹æ£‹ä½ç½®
     std::pair<int, int> getBestMove(int depth = 2);
 
 private:
-    GobangRuleChecker ruleChecker; // ½ûÊÖ¹æÔò¼ì²éÀà
+    GobangRuleChecker ruleChecker; // ç¦æ‰‹è§„åˆ™æ£€æŸ¥ç±»
 
     long long evaluateBoard();
     long long minimax(int depth, long long alpha, long long beta, bool isMaximizingPlayer);

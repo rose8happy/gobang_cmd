@@ -7,7 +7,7 @@
 GobangRuleChecker::GobangRuleChecker(std::vector<std::vector<int>>& board, int chess)
     : board(board), chess(chess) {}
 
-// ÅĞ¶ÏÄ³¸öÎ»ÖÃÊÇ·ñÎª½ûÊÖ
+// åˆ¤æ–­æŸä¸ªä½ç½®æ˜¯å¦ä¸ºç¦æ‰‹
 bool GobangRuleChecker::isForbiddenMove(int x, int y) const {
     if (isEmpty(x, y)) {
         return checkForbidden(x, y);
@@ -15,11 +15,11 @@ bool GobangRuleChecker::isForbiddenMove(int x, int y) const {
     return false;
 }
 
-// ¼ì²é½ûÊÖµÄÏà¹Ø¹æÔò
+// æ£€æŸ¥ç¦æ‰‹çš„ç›¸å…³è§„åˆ™
 bool GobangRuleChecker::checkForbidden(int x, int y) const {
     if (chess == 2)
     {
-        // °×Æå½ûÊÖ£¬°×ÆåµÚÒ»ÊÖ£¬Ö»ÄÜÏÂÔÚÏÂ°ëÇø
+        // ç™½æ£‹ç¦æ‰‹ï¼Œç™½æ£‹ç¬¬ä¸€æ‰‹ï¼Œåªèƒ½ä¸‹åœ¨ä¸‹åŠåŒº
         for (auto & i : board)
         {
             for (int j : i)
@@ -34,45 +34,45 @@ bool GobangRuleChecker::checkForbidden(int x, int y) const {
     }
     if (chess == 1)
     {
-        // ¼ì²é»îÈı¡¢ËÄ×ÓÒÔ¼°Îå×ÓÁ¬ÖéµÄ½ûÊÖ
+        // æ£€æŸ¥æ´»ä¸‰ã€å››å­ä»¥åŠäº”å­è¿ç çš„ç¦æ‰‹
         if (checkThreeAndFour(x, y, 1)) {
-            return true; // ºÚÆå½ûÊÖ
+            return true; // é»‘æ£‹ç¦æ‰‹
         }
 
         if (checkOverline(x, y, 1)) {
-            return true; // ºÚÆå½ûÊÖ
+            return true; // é»‘æ£‹ç¦æ‰‹
         }
     }
 
     return false;
 }
 
-// ¼ì²éÈıÈı¡¢ËÄËÄµÄ½ûÊÖ
+// æ£€æŸ¥ä¸‰ä¸‰ã€å››å››çš„ç¦æ‰‹
 bool GobangRuleChecker::checkThreeAndFour(int x, int y, int color) const {
     int jd = judge();
     if (jd == 1)
     {
         return false;
     }
-    // ¼ì²éËÄ¸ö·½Ïò
+    // æ£€æŸ¥å››ä¸ªæ–¹å‘
     int directions[4][2] = {
-        {1, 0}, // Ë®Æ½ÓÒ
-        {0, 1}, // ´¹Ö±ÏÂ
-        {1, 1}, // Ö÷¶Ô½ÇÏß£¨ÓÒÏÂ£©
-        {1, -1} // ¸±¶Ô½ÇÏß£¨ÓÒÉÏ£©
+        {1, 0}, // æ°´å¹³å³
+        {0, 1}, // å‚ç›´ä¸‹
+        {1, 1}, // ä¸»å¯¹è§’çº¿ï¼ˆå³ä¸‹ï¼‰
+        {1, -1} // å‰¯å¯¹è§’çº¿ï¼ˆå³ä¸Šï¼‰
     };
 
-    int countThree = 0; // ¼ÇÂ¼ÕÒµ½µÄ»îÈı¸öÊı
-    int countFour = 0;  // ¼ÇÂ¼ÕÒµ½µÄ»îËÄ¸öÊı
+    int countThree = 0; // è®°å½•æ‰¾åˆ°çš„æ´»ä¸‰ä¸ªæ•°
+    int countFour = 0;  // è®°å½•æ‰¾åˆ°çš„æ´»å››ä¸ªæ•°
 
     for (auto & direction : directions) {
         int dx = direction[0];
         int dy = direction[1];
 
-        // ¼ì²éµ±Ç°·½ÏòÉÏµÄ»îÈıºÍ»îËÄ
-        int count = 1; // µ±Ç°Æå×ÓÒÑËãÉÏ
+        // æ£€æŸ¥å½“å‰æ–¹å‘ä¸Šçš„æ´»ä¸‰å’Œæ´»å››
+        int count = 1; // å½“å‰æ£‹å­å·²ç®—ä¸Š
 
-        // ÏòÒ»¸ö·½ÏòÑÓÉì
+        // å‘ä¸€ä¸ªæ–¹å‘å»¶ä¼¸
         int nx = x + dx;
         int ny = y + dy;
         while (nx >= 0 && nx < board.size() && ny >= 0 && ny < board[0].size() && board[nx][ny] == color) {
@@ -81,7 +81,7 @@ bool GobangRuleChecker::checkThreeAndFour(int x, int y, int color) const {
             ny += dy;
         }
 
-        // ÏòÏà·´·½ÏòÑÓÉì
+        // å‘ç›¸åæ–¹å‘å»¶ä¼¸
         nx = x - dx;
         ny = y - dy;
         while (nx >= 0 && nx < board.size() && ny >= 0 && ny < board[0].size() && board[nx][ny] == color) {
@@ -90,9 +90,9 @@ bool GobangRuleChecker::checkThreeAndFour(int x, int y, int color) const {
             ny -= dy;
         }
 
-        // ÅĞ¶Ï»îÈıºÍ»îËÄ
+        // åˆ¤æ–­æ´»ä¸‰å’Œæ´»å››
         if (count == 3) {
-            // Èç¹ûÔÚµ±Ç°·½ÏòÉÏĞÎ³É»îÈı£¬¼ì²éÁ½¶ËÊÇ·ñÓĞ¿ÕÎ»
+            // å¦‚æœåœ¨å½“å‰æ–¹å‘ä¸Šå½¢æˆæ´»ä¸‰ï¼Œæ£€æŸ¥ä¸¤ç«¯æ˜¯å¦æœ‰ç©ºä½
             if ((x + dx * 3 >= 0 && x + dx * 3 < board.size() && y + dy * 3 >= 0 && y + dy * 3 < board[0].size() && board[x + dx * 3][y + dy * 3] == 0) &&
                 (x - dx >= 0 && x - dx < board.size() && y - dy >= 0 && y - dy < board[0].size() && board[x - dx][y - dy] == 0)) {
                 countThree++;
@@ -100,7 +100,7 @@ bool GobangRuleChecker::checkThreeAndFour(int x, int y, int color) const {
         }
 
         if (count == 4) {
-            // Èç¹ûÔÚµ±Ç°·½ÏòÉÏĞÎ³É»îËÄ£¬¼ì²éÁ½¶ËÊÇ·ñÓĞ¿ÕÎ»
+            // å¦‚æœåœ¨å½“å‰æ–¹å‘ä¸Šå½¢æˆæ´»å››ï¼Œæ£€æŸ¥ä¸¤ç«¯æ˜¯å¦æœ‰ç©ºä½
             if ((x + dx * 4 >= 0 && x + dx * 4 < board.size() && y + dy * 4 >= 0 && y + dy * 4 < board[0].size() && board[x + dx * 4][y + dy * 4] == 0) &&
                 (x - dx >= 0 && x - dx < board.size() && y - dy >= 0 && y - dy < board[0].size() && board[x - dx][y - dy] == 0)) {
                 countFour++;
@@ -108,28 +108,28 @@ bool GobangRuleChecker::checkThreeAndFour(int x, int y, int color) const {
         }
     }
 
-    // Èç¹ûÕÒµ½Á½¸ö»îÈı»òÁ½¸ö»îËÄ£¬·µ»Øtrue£¬±íÊ¾½ûÊÖ
+    // å¦‚æœæ‰¾åˆ°ä¸¤ä¸ªæ´»ä¸‰æˆ–ä¸¤ä¸ªæ´»å››ï¼Œè¿”å›trueï¼Œè¡¨ç¤ºç¦æ‰‹
     return (countThree >= 2 || countFour >= 2);
 }
 
 
-// ¼ì²é³¤Á¬µÄ½ûÊÖ
+// æ£€æŸ¥é•¿è¿çš„ç¦æ‰‹
 bool GobangRuleChecker::checkOverline(int x, int y, int color) const {
-    // ¼ì²éËÄ¸ö·½Ïò
+    // æ£€æŸ¥å››ä¸ªæ–¹å‘
     int directions[4][2] = {
-        {1, 0}, // Ë®Æ½ÓÒ
-        {0, 1}, // ´¹Ö±ÏÂ
-        {1, 1}, // Ö÷¶Ô½ÇÏß£¨ÓÒÏÂ£©
-        {1, -1} // ¸±¶Ô½ÇÏß£¨ÓÒÉÏ£©
+        {1, 0}, // æ°´å¹³å³
+        {0, 1}, // å‚ç›´ä¸‹
+        {1, 1}, // ä¸»å¯¹è§’çº¿ï¼ˆå³ä¸‹ï¼‰
+        {1, -1} // å‰¯å¯¹è§’çº¿ï¼ˆå³ä¸Šï¼‰
     };
 
     for (auto & direction : directions) {
         int dx = direction[0];
         int dy = direction[1];
 
-        int count = 1; // µ±Ç°Æå×ÓÒÑËãÉÏ
+        int count = 1; // å½“å‰æ£‹å­å·²ç®—ä¸Š
 
-        // ÏòÒ»¸ö·½ÏòÑÓÉì
+        // å‘ä¸€ä¸ªæ–¹å‘å»¶ä¼¸
         int nx = x + dx;
         int ny = y + dy;
         while (nx >= 0 && nx < board.size() && ny >= 0 && ny < board[0].size() && board[nx][ny] == color) {
@@ -138,7 +138,7 @@ bool GobangRuleChecker::checkOverline(int x, int y, int color) const {
             ny += dy;
         }
 
-        // ÏòÏà·´·½ÏòÑÓÉì
+        // å‘ç›¸åæ–¹å‘å»¶ä¼¸
         nx = x - dx;
         ny = y - dy;
         while (nx >= 0 && nx < board.size() && ny >= 0 && ny < board[0].size() && board[nx][ny] == color) {
@@ -147,39 +147,39 @@ bool GobangRuleChecker::checkOverline(int x, int y, int color) const {
             ny -= dy;
         }
 
-        // ¼ì²éÊÇ·ñ³¬¹ıÎå¸öÁ¬Ğø
+        // æ£€æŸ¥æ˜¯å¦è¶…è¿‡äº”ä¸ªè¿ç»­
         if (count > 5) {
-            return true; // ³¬¹ıÎå¸ö£¬ÊôÓÚ³¤Á¬
+            return true; // è¶…è¿‡äº”ä¸ªï¼Œå±äºé•¿è¿
         }
     }
 
-    return false; // Ã»ÓĞ³¤Á¬
+    return false; // æ²¡æœ‰é•¿è¿
 }
 
 int GobangRuleChecker::judge() const {
-    // ±éÀúÕû¸öÆåÅÌ£¬¼ì²éÃ¿¸öÎ»ÖÃµÄÆå×ÓÊÇ·ñĞÎ³ÉÎåÁ¬Öé
+    // éå†æ•´ä¸ªæ£‹ç›˜ï¼Œæ£€æŸ¥æ¯ä¸ªä½ç½®çš„æ£‹å­æ˜¯å¦å½¢æˆäº”è¿ç 
     for (int x = 0; x < board.size(); ++x) {
         for (int y = 0; y < board[0].size(); ++y) {
             int color = board[x][y];
-            if (color != 0) { // Èç¹ûÕâ¸öÎ»ÖÃÓĞÆå×Ó
-                // ¼ì²éËÄ¸ö·½ÏòÊÇ·ñĞÎ³ÉÎåÁ¬Öé
-                if (checkFiveInLine(x, y, 1, 0, color) || // Ë®Æ½
-                    checkFiveInLine(x, y, 0, 1, color) || // ´¹Ö±
-                    checkFiveInLine(x, y, 1, 1, color) || // ÓÒÏÂ¶Ô½ÇÏß
-                    checkFiveInLine(x, y, 1, -1, color))  // ×óÏÂ¶Ô½ÇÏß
+            if (color != 0) { // å¦‚æœè¿™ä¸ªä½ç½®æœ‰æ£‹å­
+                // æ£€æŸ¥å››ä¸ªæ–¹å‘æ˜¯å¦å½¢æˆäº”è¿ç 
+                if (checkFiveInLine(x, y, 1, 0, color) || // æ°´å¹³
+                    checkFiveInLine(x, y, 0, 1, color) || // å‚ç›´
+                    checkFiveInLine(x, y, 1, 1, color) || // å³ä¸‹å¯¹è§’çº¿
+                    checkFiveInLine(x, y, 1, -1, color))  // å·¦ä¸‹å¯¹è§’çº¿
                 {
-                    return color; // Èç¹ûÕÒµ½ÎåÁ¬Öé£¬·µ»Ø»ñÊ¤·½µÄÑÕÉ«£¨1=ºÚÆå£¬2=°×Æå£©
+                    return color; // å¦‚æœæ‰¾åˆ°äº”è¿ç ï¼Œè¿”å›è·èƒœæ–¹çš„é¢œè‰²ï¼ˆ1=é»‘æ£‹ï¼Œ2=ç™½æ£‹ï¼‰
                 }
             }
         }
     }
-    return 0; // Èç¹ûÃ»ÓĞÕÒµ½ÎåÁ¬Öé£¬·µ»Ø0±íÊ¾ÎŞÈË»ñÊ¤
+    return 0; // å¦‚æœæ²¡æœ‰æ‰¾åˆ°äº”è¿ç ï¼Œè¿”å›0è¡¨ç¤ºæ— äººè·èƒœ
 }
 
-// ¸¨Öúº¯Êı£º¼ì²éÄ³¸ö·½ÏòÉÏÊÇ·ñĞÎ³ÉÎåÁ¬Öé
+// è¾…åŠ©å‡½æ•°ï¼šæ£€æŸ¥æŸä¸ªæ–¹å‘ä¸Šæ˜¯å¦å½¢æˆäº”è¿ç 
 bool GobangRuleChecker::checkFiveInLine(int x, int y, int dx, int dy, int color) const {
     int count = 1;
-    // ÕıÏò·½Ïò¼ì²é
+    // æ­£å‘æ–¹å‘æ£€æŸ¥
     for (int i = 1; i < 5; ++i) {
         int nx = x + i * dx, ny = y + i * dy;
         if (nx >= 0 && nx < board.size() && ny >= 0 && ny < board[0].size() && board[nx][ny] == color) {
@@ -188,7 +188,7 @@ bool GobangRuleChecker::checkFiveInLine(int x, int y, int dx, int dy, int color)
             break;
         }
     }
-    // ·´Ïò·½Ïò¼ì²é
+    // åå‘æ–¹å‘æ£€æŸ¥
     for (int i = 1; i < 5; ++i) {
         int nx = x - i * dx, ny = y - i * dy;
         if (nx >= 0 && nx < board.size() && ny >= 0 && ny < board[0].size() && board[nx][ny] == color) {
@@ -197,7 +197,7 @@ bool GobangRuleChecker::checkFiveInLine(int x, int y, int dx, int dy, int color)
             break;
         }
     }
-    return count >= 5; // Èç¹ûÎå×ÓÁ¬Öé£¬·µ»Øtrue
+    return count >= 5; // å¦‚æœäº”å­è¿ç ï¼Œè¿”å›true
 }
 
 

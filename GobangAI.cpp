@@ -8,10 +8,10 @@
 GobangAI::GobangAI(std::vector<std::vector<int>>& board, int chess)
     : board(board), chess(chess), ruleChecker(board, aiChess)
 {
-    std::srand(static_cast<unsigned>(std::time(nullptr)));  // ³õÊ¼»¯Ëæ»úÊıÖÖ×Ó
+    std::srand(static_cast<unsigned>(std::time(nullptr)));  // åˆå§‹åŒ–éšæœºæ•°ç§å­
 }
 
-// »ñÈ¡×î¼ÑÂä×ÓÎ»ÖÃ
+// è·å–æœ€ä½³è½å­ä½ç½®
 std::pair<int, int> GobangAI::getBestMove(int depth) {
     ruleChecker.chess = aiChess;
     long long bestScore = -100000;
@@ -20,12 +20,12 @@ std::pair<int, int> GobangAI::getBestMove(int depth) {
     for (int row = 0; row < board.size(); ++row) {
         for (int col = 0; col < board[row].size(); ++col) {
             if (board[row][col] == 0 && !ruleChecker.isForbiddenMove(row, col)) {
-                // ÁÙÊ±Âä×Ó
+                // ä¸´æ—¶è½å­
                 board[row][col] = aiChess;
 
                 long long score = minimax(depth - 1, -100000, 100000, false);
 
-                // »Ö¸´ÆåÅÌ×´Ì¬
+                // æ¢å¤æ£‹ç›˜çŠ¶æ€
                 board[row][col] = 0;
 
                 if (score > bestScore) {
@@ -40,31 +40,31 @@ std::pair<int, int> GobangAI::getBestMove(int depth) {
     }
 
     if (bestMoves.empty()) {
-        // ·µ»ØÒ»¸öÄ¬ÈÏÎ»ÖÃ£¬»òÕß´¦ÀíÃ»ÓĞ¿ÉĞĞÂä×ÓµãµÄÇé¿ö
-        return {-1, -1};  // Ê¾Àı·µ»ØÎŞĞ§Î»ÖÃ
+        // è¿”å›ä¸€ä¸ªé»˜è®¤ä½ç½®ï¼Œæˆ–è€…å¤„ç†æ²¡æœ‰å¯è¡Œè½å­ç‚¹çš„æƒ…å†µ
+        return {-1, -1};  // ç¤ºä¾‹è¿”å›æ— æ•ˆä½ç½®
     }
-    // Ëæ»úÑ¡ÔñÒ»¸ö×îÓÅÂä×ÓÎ»ÖÃ
+    // éšæœºé€‰æ‹©ä¸€ä¸ªæœ€ä¼˜è½å­ä½ç½®
     return bestMoves[std::rand() % bestMoves.size()];
 }
 
 long long GobangAI::evaluateBoard() {
     long long score = 0;
 
-    // ±éÀúÆåÅÌ£¬¼ì²âÃ¿¸öÎ»ÖÃµÄÆåĞÍ²¢¼Ó·Ö
+    // éå†æ£‹ç›˜ï¼Œæ£€æµ‹æ¯ä¸ªä½ç½®çš„æ£‹å‹å¹¶åŠ åˆ†
     for (int row = 0; row < board.size(); ++row) {
         for (int col = 0; col < board[row].size(); ++col) {
             if (board[row][col] != 0) {
-                // µ±Ç°Æå×ÓµÄÑÕÉ«
+                // å½“å‰æ£‹å­çš„é¢œè‰²
                 int chess = board[row][col];
                 long long currentScore = 0;
 
-                // ¼ì²éµ±Ç°Æå×ÓÔÚËÄ¸ö·½ÏòÉÏµÄÆåĞÍ
-                currentScore += evaluateLine(row, col, 1, 0, chess);  // Ë®Æ½·½Ïò
-                currentScore += evaluateLine(row, col, 0, 1, chess);  // ´¹Ö±·½Ïò
-                currentScore += evaluateLine(row, col, 1, 1, chess);  // Ö÷¶Ô½ÇÏß
-                currentScore += evaluateLine(row, col, 1, -1, chess); // ¸±¶Ô½ÇÏß
+                // æ£€æŸ¥å½“å‰æ£‹å­åœ¨å››ä¸ªæ–¹å‘ä¸Šçš„æ£‹å‹
+                currentScore += evaluateLine(row, col, 1, 0, chess);  // æ°´å¹³æ–¹å‘
+                currentScore += evaluateLine(row, col, 0, 1, chess);  // å‚ç›´æ–¹å‘
+                currentScore += evaluateLine(row, col, 1, 1, chess);  // ä¸»å¯¹è§’çº¿
+                currentScore += evaluateLine(row, col, 1, -1, chess); // å‰¯å¯¹è§’çº¿
 
-                // AI·½µÃ·ÖÔö¼Ó£¬¶ÔÊÖµÃ·Ö¼õÉÙ
+                // AIæ–¹å¾—åˆ†å¢åŠ ï¼Œå¯¹æ‰‹å¾—åˆ†å‡å°‘
                 if (chess == aiChess) {
                     score += currentScore;
                 } else {
@@ -76,13 +76,13 @@ long long GobangAI::evaluateBoard() {
     return score;
 }
 
-// ¸¨Öúº¯Êı£¬ÓÃÓÚÆÀ¹ÀÄ³Ò»·½ÏòÉÏµÄÆåĞÍ
+// è¾…åŠ©å‡½æ•°ï¼Œç”¨äºè¯„ä¼°æŸä¸€æ–¹å‘ä¸Šçš„æ£‹å‹
 long long GobangAI::evaluateLine(int row, int col, int dx, int dy, int chess) {
-    int count = 1;       // Á¬ĞøÍ¬É«Æå×ÓÊı
-    int openEnds = 0;    // Á½¶ËµÄ¿ÕÎ»Êı
+    int count = 1;       // è¿ç»­åŒè‰²æ£‹å­æ•°
+    int openEnds = 0;    // ä¸¤ç«¯çš„ç©ºä½æ•°
     long long score = 0;
 
-    // ÏòÒ»¸ö·½Ïò±éÀú
+    // å‘ä¸€ä¸ªæ–¹å‘éå†
     int x = row + dx;
     int y = col + dy;
     while (isInBounds(x, y) && board[x][y] == chess) {
@@ -92,7 +92,7 @@ long long GobangAI::evaluateLine(int row, int col, int dx, int dy, int chess) {
     }
     if (isInBounds(x, y) && board[x][y] == 0) openEnds++;
 
-    // ÏòÏà·´·½Ïò±éÀú
+    // å‘ç›¸åæ–¹å‘éå†
     x = row - dx;
     y = col - dy;
     while (isInBounds(x, y) && board[x][y] == chess) {
@@ -102,7 +102,7 @@ long long GobangAI::evaluateLine(int row, int col, int dx, int dy, int chess) {
     }
     if (isInBounds(x, y) && board[x][y] == 0) openEnds++;
 
-    // ¸ù¾İÆåĞÍºÍ¿ÕÎ»Êı¸ø·Ö
+    // æ ¹æ®æ£‹å‹å’Œç©ºä½æ•°ç»™åˆ†
     if (count >= 5) {
         score = WIN;
     } else if (count == 4) {
@@ -113,15 +113,15 @@ long long GobangAI::evaluateLine(int row, int col, int dx, int dy, int chess) {
         score = openEnds == 2 ? LIVE_TWO : 0;
     }
 
-    // ¶Ô½ûÊÖÎ»ÖÃ½øĞĞÌØÊâ´¦Àí
+    // å¯¹ç¦æ‰‹ä½ç½®è¿›è¡Œç‰¹æ®Šå¤„ç†
     if (chess == 1 && ruleChecker.isForbiddenMove(row, col)) {
-        score = -10000;  // ½ûÊÖÎ»µÄ·ÖÊı
+        score = -10000;  // ç¦æ‰‹ä½çš„åˆ†æ•°
     }
 
     return score;
 }
 
-// ¸¨Öúº¯Êı£¬ÅĞ¶Ï×ø±êÊÇ·ñÔÚÆåÅÌ·¶Î§ÄÚ
+// è¾…åŠ©å‡½æ•°ï¼Œåˆ¤æ–­åæ ‡æ˜¯å¦åœ¨æ£‹ç›˜èŒƒå›´å†…
 bool GobangAI::isInBounds(int x, int y) const{
     return x >= 0 && x < board.size() && y >= 0 && y < board[0].size();
 }
@@ -136,15 +136,15 @@ long long GobangAI::minimax(int depth, long long alpha, long long beta, bool isM
     for (int row = 0; row < board.size(); ++row) {
         for (int col = 0; col < board[row].size(); ++col) {
             if (board[row][col] == 0 && !ruleChecker.isForbiddenMove(row, col)) {
-                // ÁÙÊ±Âä×Ó
+                // ä¸´æ—¶è½å­
                 board[row][col] = isMaximizingPlayer ? aiChess : chess;
 
                 long long score = minimax(depth - 1, alpha, beta, !isMaximizingPlayer);
 
-                // »Ö¸´ÆåÅÌ×´Ì¬
+                // æ¢å¤æ£‹ç›˜çŠ¶æ€
                 board[row][col] = 0;
 
-                // ¸üĞÂ×î¼ÑµÃ·Ö
+                // æ›´æ–°æœ€ä½³å¾—åˆ†
                 if (isMaximizingPlayer) {
                     bestScore = std::max(bestScore, score);
                     alpha = std::max(alpha, score);

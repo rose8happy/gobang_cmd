@@ -18,17 +18,17 @@ public:
     int judge() const;
 
 private:
-    // ¼ì²éÒ»¸öÎ»ÖÃÊÇ·ñÓĞÒ»¸ö½ûÊÖ
+    // æ£€æŸ¥ä¸€ä¸ªä½ç½®æ˜¯å¦æœ‰ä¸€ä¸ªç¦æ‰‹
     bool checkForbidden(int x, int y) const;
-    // ¼ì²é»îÈıºÍËÄ×Ó½ûÊÖ
+    // æ£€æŸ¥æ´»ä¸‰å’Œå››å­ç¦æ‰‹
     bool checkThreeAndFour(int x, int y, int color) const;
-    // ¼ì²é³¤Á¬µÄ½ûÊÖ
+    // æ£€æŸ¥é•¿è¿çš„ç¦æ‰‹
     bool checkOverline(int x, int y, int color) const;
-    // ÅĞ¶ÏÄ³¸öÎ»ÖÃµÄÆå×ÓÊÇ·ñÎªºÚÆå
+    // åˆ¤æ–­æŸä¸ªä½ç½®çš„æ£‹å­æ˜¯å¦ä¸ºé»‘æ£‹
     bool isBlack(int x, int y) const {
         return board[x][y] == 1;
     }
-    // ÅĞ¶ÏÄ³¸öÎ»ÖÃµÄÆå×ÓÊÇ·ñÎª¿Õ
+    // åˆ¤æ–­æŸä¸ªä½ç½®çš„æ£‹å­æ˜¯å¦ä¸ºç©º
     bool isEmpty(int x, int y) const {
         return board[x][y] == 0;
     }
