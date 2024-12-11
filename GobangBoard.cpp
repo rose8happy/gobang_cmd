@@ -136,7 +136,7 @@ void GobangBoard::mousePressEvent() {
             pre_black = {row, col};
         else
             pre_white = {row, col};
-        drawBoard();
+        //drawBoard();
         int res = ruleChecker.judge();
         if (res) {
             winOrLose(res == chess);
